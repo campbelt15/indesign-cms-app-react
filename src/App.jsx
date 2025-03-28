@@ -1,53 +1,28 @@
-import { useState } from "react";
-import { Auth } from "aws-amplify";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useAuth } from "./auth/AuthContext";
+import Login from "./views/Login";
+import Home from "./views/Home";
 
 function App() {
-  const [user, setUser] = useState(null);
-  const [form, setForm] = useState({ username: "", password: "" });
-  const [error, setError] = useState("");
+  const { user, loading } = useAuth();
 
-  const handleLogin = async () => {
-    try {
-      const user = await Auth.signIn(form.username, form.password);
-      setUser(user);
-      console.log("✅ Login exitoso:", user);
-    } catch (err) {
-      setError("❌ Credenciales incorrectas");
-      console.error(err);
-    }
-  };
+  if (loading) return <div>Cargando sesión...</div>;
 
   return (
-    <div style={{ padding: 20 }}>
-      {user ? (
-        <div>
-          <h2>Bienvenido, {user.username}</h2>
-          <button
-            onClick={async () => {
-              await Auth.signOut();
-              setUser(null);
-            }}
-          >
-            Cerrar sesión
-          </button>
-        </div>
-      ) : (
-        <div>
-          <h2>Login</h2>
-          <input
-            placeholder="usuario"
-            onChange={(e) => setForm({ ...form, username: e.target.value })}
-          />
-          <input
-            placeholder="contraseña"
-            type="password"
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-          />
-          <button onClick={handleLogin}>Entrar</button>
-          {error && <p style={{ color: "red" }}>{error}</p>}
-        </div>
-      )}
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/login"
+          element={!user ? <Login /> : <Navigate to="/" />}
+        />
+        <Route path="/" element={user ? <Home /> : <Navigate to="/login" />} />
+      </Routes>
+    </Router>
   );
 }
 

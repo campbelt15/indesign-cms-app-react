@@ -1,20 +1,26 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
 import "./index.css";
+import App from "./App.jsx";
+
+import { Amplify } from "aws-amplify";
+import amplifyConfig from "../aws-exports.js";
+
+// Polyfills requeridos por Amplify Gen 1
 import { Buffer } from "buffer";
 import process from "process";
 window.global = window;
 window.process = process;
 window.Buffer = Buffer;
 
-import { Amplify } from "aws-amplify";
-import amplifyConfig from "../aws-exports.js";
-
 Amplify.configure(amplifyConfig);
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+import { AuthProvider } from "./auth/AuthContext.jsx";
+
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </StrictMode>,
 );
