@@ -17,11 +17,14 @@ window.Buffer = Buffer;
 Amplify.configure(amplifyConfig);
 
 import { AuthProvider } from "./auth/AuthContext.jsx";
+import { AppProvider } from "./context/AppProvider.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <AuthProvider>
-      <App />
+      <AppProvider>
+        <App />
+      </AppProvider>
     </AuthProvider>
   </StrictMode>,
 );

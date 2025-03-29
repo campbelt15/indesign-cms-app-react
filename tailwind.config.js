@@ -1,4 +1,5 @@
 export default {
+  darkMode: "class",
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
     extend: {
@@ -8,6 +9,8 @@ export default {
         error: "#dc2626",
         bgLight: "#f3f4f6",
         card: "#ffffff",
+        darkBg: "#1f2937", // 🆕 color fondo dark
+        darkCard: "#374151", // 🆕 color tarjetas dark
       },
     },
   },

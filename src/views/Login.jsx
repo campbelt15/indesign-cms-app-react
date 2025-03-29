@@ -1,12 +1,19 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
+import { useApp } from "../hooks/useApp";
 
 export default function Login() {
   const { login } = useAuth();
+  const { darkMode, setDarkMode } = useApp(); // 👈 usamos el contexto
   const navigate = useNavigate();
   const [form, setForm] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+
+  const toggleDark = () => {
+    console.log("🖱 Cambiando darkMode...");
+    setDarkMode((prev) => !prev);
+  };
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -24,15 +31,24 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-8">
-        <h2 className="text-3xl font-bold text-center text-primary mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 dark:bg-darkBg transition-all">
+      <div className="absolute top-4 right-4">
+        <button
+          onClick={toggleDark}
+          className="bg-gray-300 dark:bg-gray-700 text-black dark:text-white px-4 py-2 rounded-md shadow-md"
+        >
+          {darkMode ? "☀️" : "🌙"}
+        </button>
+      </div>
+
+      <div className="w-full max-w-md bg-white dark:bg-darkCard rounded-2xl shadow-lg p-8">
+        <h2 className="text-3xl font-bold text-center text-primary dark:text-white mb-6">
           Iniciar Sesión
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Usuario
             </label>
             <input
@@ -41,12 +57,12 @@ export default function Login() {
               value={form.username}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none dark:bg-gray-800 dark:text-white"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
               Contraseña
             </label>
             <input
@@ -56,7 +72,7 @@ export default function Login() {
               value={form.password}
               onChange={handleChange}
               required
-              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none"
+              className="w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-400 outline-none dark:bg-gray-800 dark:text-white"
             />
           </div>
 
